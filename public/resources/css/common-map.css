@@ -1,0 +1,7 @@
+.custom-map-popup {
+	padding-top: 5px;
+}
+
+.leaflet-popup-content-wrapper {
+	border-radius: 8px !important;
+}

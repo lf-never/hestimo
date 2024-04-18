@@ -1,0 +1,20 @@
+.modal .modal-content .modal-header {
+    padding: 0.5rem 1rem;
+    /* border-bottom: 0; */
+}
+.modal .modal-content .modal-body {
+    padding: 0.5rem 1rem;
+} 
+.modal .modal-content .modal-footer {
+    padding: 0.2rem 1rem;
+    /* border-top: 0; */
+}
+.modal-header .close {
+    padding: 0.7rem 1rem;
+    margin: -0.5rem -1rem -1rem auto;
+}
+
+
+.toast {
+    width: 300px;
+}

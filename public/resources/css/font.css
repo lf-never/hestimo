@@ -1,0 +1,67 @@
+@font-face {
+    font-family: 'Helvetica';
+    src: url(./fonts/Helvetica.ttf)
+}
+
+body {
+    font: 14px Helvetica !important;
+}
+
+.ft-30 {
+    font-size: 30px !important;
+}
+
+.ft-24 {
+    font-size: 24px !important;
+}
+
+.ft-20 {
+    font-size: 20px !important;
+}
+
+.ft-18 {
+    font-size: 18px !important;
+}
+
+.ft-16 {
+    font-size: 16px !important;
+}
+
+.ft-14 {
+    font-size: 14px !important;
+}
+
+.ft-12 {
+    font-size: 12px !important;
+}
+
+.modal-content {
+    border: 2px solid #549D26 !important;
+}
+.modal-header {
+    background-color: #033804 !important;
+    border-bottom: none !important;
+}
+.modal-body {
+    background-color: #212121 !important;
+    border-bottom-left-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+}
+.modal-dialog .form-control {
+    background-color: #434343 !important;
+    border: none !important;
+    color: white;
+}
+
+.modal2 .modal-content {
+    border-radius: 0 !important;
+}
+.modal2 .modal-header {
+    background-color: #549D26 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+.modal2 .modal-body {
+    background-color: #000000 !important;
+    border-radius: 0 !important;
+}

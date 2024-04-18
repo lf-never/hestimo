@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 39.803 39.803">
+  <g id="add" transform="translate(-1269.103 -120)">
+    <g id="a" transform="translate(1269.103 120)">
+      <path id="a-2" data-name="a" d="M51.9,71.8A19.9,19.9,0,1,1,71.8,51.9,19.9,19.9,0,0,1,51.9,71.8Zm0-2.654A17.248,17.248,0,1,0,34.654,51.9,17.247,17.247,0,0,0,51.9,69.149Z" transform="translate(-32 -32)" fill="#fff"/>
+      <path id="a-3" data-name="a" d="M225.327,482.654a1.327,1.327,0,1,1,0-2.654h21.228a1.327,1.327,0,1,1,0,2.654Z" transform="translate(-216.039 -461.425)" fill="#fff"/>
+      <path id="a-4" data-name="a" d="M480,225.327a1.327,1.327,0,1,1,2.654,0v21.228a1.327,1.327,0,1,1-2.654,0Z" transform="translate(-461.425 -216.039)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

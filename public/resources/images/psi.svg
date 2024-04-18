@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <g id="psi" transform="translate(-6495.099 -1918)">
+    <g id="a" transform="translate(1.099 319)">
+      <text id="psi-2" data-name="psi" transform="translate(6499 1623)" fill="#78de32" font-size="17" font-family="Helvetica"><tspan x="0" y="0">PSI</tspan></text>
+      <path id="a-2" data-name="a" d="M2,.6A1.4,1.4,0,0,0,.6,2V34A1.4,1.4,0,0,0,2,35.4H34A1.4,1.4,0,0,0,35.4,34V2A1.4,1.4,0,0,0,34,.6H2M2,0H34a2,2,0,0,1,2,2V34a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V2A2,2,0,0,1,2,0Z" transform="translate(6494 1599)" fill="#78de32"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+    <!-- <meta http-equiv="Content-Security-Policy" content="style-src 'nonce-123456'; script-src 'nonce-123456';"> -->
+    <head>
+    <title>Hestimo</title>
+    <%- include('common/common-html.html') -%>
+    <%- include('common/common-dataTable.html') -%>
+    <%- include('common/common-map.html') -%>
+
+
+<link rel="stylesheet" href="../highcharts/css/highcharts.css"> 
+<script type="text/javascript" src="../highcharts/highcharts.js"></script>
+<script type="text/javascript" src="../highcharts/modules/boost.js"></script> 
+<link rel="stylesheet" href="../css/index.css">
+
+</head>
+
+<body>
+    <nav class="nav-bar">
+        <div class="row h-100 align-items-center justify-content-between px-3">
+            <div class="col-4">
+                <div class="d-inline"><img src="../images/ACTIVITY.svg"></div>
+                <div class="d-inline"><span id="currentActivityName"></span></div>
+            </div>
+            <div class="col-auto">
+                <div class="row">
+                    <div class="col-auto align-self-center">
+                        <div><span class="color-grey ft-14">Algorithm Selected</span></div>
+                        <div><span class="ft-24" id="currentAlgorithm">-</span></div>
+                    </div>
+                    <div class="vr mx-4"></div>
+                    <div class="col-auto align-self-center">
+                        <div><span class="color-grey">Elapsed</span></div>
+                        <div><span class="color-grey">Time</span></div>
+                    </div>
+                    <div class="vr mx-2"></div>
+                    <div class="col-auto align-self-center text-center">
+                        <div><span class="color-grey ft-14">Hours</span></div>
+                        <div><span class="ft-24" id="currentHour">-</span></div>
+                    </div>
+                    <div class="col-auto align-self-center text-center">
+                        <div style="width: 16px; color: #003802"><span>:</span></div>
+                        <div style="width: 16px;"><span class="ft-24">:</span></div>
+                    </div>
+                    <div class="col-auto align-self-center text-center">
+                        <div><span class="color-grey ft-14">Mins</span></div>
+                        <div><span class="ft-24" id="currentMin">-</span></div>
+                    </div>
+                    <div class="col-auto mx-3 align-self-center" id="nav-card-list">
+                        <div class="nav-card background-4 " data-status="4">
+                            <span class="ft-30" id="red">-</span>
+                            <span class="ft-30">/</span>
+                            <sub><span class="total">-</span></sub>
+                        </div>
+                        <div class="nav-card background-3 " data-status="3">
+                            <span class="ft-30" id="amber">-</span>
+                            <span class="ft-30">/</span>
+                            <sub><span class="total">-</span></sub>
+                        </div>
+                        <div class="nav-card background-2 " data-status="2">
+                            <span class="ft-30" id="white">-</span>
+                            <span class="ft-30">/</span>
+                            <sub><span class="total">-</span></sub>
+                        </div>
+                        <div class="nav-card background-1 " data-status="1">
+                            <span class="ft-30" id="green">-</span>
+                            <span class="ft-30">/</span>
+                            <sub><span class="total">-</span></sub>
+                        </div>
+                    </div>
+                    <div class="col-auto align-self-center">
+                        <div class="dropdown">
+                            <img src="../images/legend.svg" class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: none;">
+                            <ul class="dropdown-menu dropdown-menu-dark p-0 m-0" style="width: 240px;">
+                                <li class="p-2 background-menu"><img src="../images/MANAGEMENT.svg"><b>Management</b></li>
+                                <li class="menu-li">
+                                    <div><span class="dropdown-item" type="button" id="btn-devices-status">Device Status</span></div>
+                                </li>
+                                <li class="p-2 background-menu"><img src="../images/ACTIVITY.svg"><b>Activity</b></li>
+                                <li class="menu-li">
+                                    <div><span class="dropdown-item" type="button" id="btn-new-activity">New Activity</span></div>
+                                    <div><span class="dropdown-item" type="button" id="btn-end-activity">End Activity</span></div>
+                                    <div><span class="dropdown-item" type="button" id="btn-view-past-activity">View Past Activity</span></div>
+                                </li>
+                            </ul>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="row w-100" style="position: fixed; height: calc(100% - 80px);">
+            <div class="col-xxl-8 col-xl-7 col-md-8 col-sm-7 col-6 h-100 py-3 px-2" id="map-container">
+                <div class="main-box square-1">
+                    <div class="w-100 h-100" id="map"></div>
+                    <div class="map-expand">
+                        <img src="../images/g-1.svg">
+                    </div>
+                    <div class="map-show-all">
+                        <div class="form-check form-switch">
+                            <div><label class="form-check-label" for="showAll">Show All</label></div>
+                            <div><input class="form-check-input" type="checkbox" role="switch" id="showAll" checked></div>
+                        </div>
+                    </div>
+                    <div class="map-custom-control map-show-green active" data-status="1">
+                        <div><span id="green-number">-/-</span></div>
+                    </div>
+                    <div class="map-custom-control map-show-yellow active" data-status="3">
+                        <div><span id="yellow-number">-/-</span></div>
+                    </div>
+                    <div class="map-custom-control map-show-red active" data-status="4">
+                        <div><span id="red-number">-/-</span></div>
+                    </div>
+                    <div class="map-custom-control map-show-white active" data-status="2">
+                        <div><span id="white-number">-/-</span></div>
+                    </div>
+                    <div class="map-legend">
+                        <div class="row justify-content-between align-items-center" id="btn-legend">
+                            <div class="col-auto ms-2">
+                                <div><label>Legend</label></div> 
+                            </div>
+                            <div class="col-auto me-2">
+                                <div><img src="../images/legend.svg" style="width:18px;height: 18px;" id="legend-img"></div>
+                            </div>
+                        </div>
+                        <div class="row background-legend ps-3 py-2">
+                            <div>
+                                <img src="../images/Heart Rate.svg">
+                                <span>Heart Rate</span>
+                            </div>
+                            <div>
+                                <img src="../images/Breathing Rate.svg">
+                                <span>Breathing Rate</span>
+                            </div>
+                            <div>
+                                <img src="../images/Core Temperature.svg">
+                                <span>Core Temperature</span>
+                            </div>
+                            <div>
+                                <img src="../images/psi.svg">
+                                <span>Physiological Strain Index</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="map-satellite" id="btn-switch-map">
+                        <img src="../images/satellite.png">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-4 col-xl-5 col-md-4 col-sm-5 col-6 h-100 py-3 px-2 bg-black" id="list-container">
+                <div class="main-box square-1">
+                    <div class="w-100 h-100">
+                        <div class="trainee-top">
+                            <div class="row h-100 align-items-center">
+                                <div class="col-6">
+                                    <div class="d-inline"><img src="../images/online.svg"></div>
+                                    <div class="d-inline"><span>Online:</span></div>
+                                    <div class="d-inline">
+                                        <span id="online">-/-</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="d-inline"><img src="../images/view less.svg"></div>
+                                    <div class="d-inline"><span id="btn-view-less" class="link-success" style="cursor: pointer;">View More</span></div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="float-end"><img src="../images/g-1.svg" id="expand-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="trainee-detail" style="height: calc(100% - 72px); overflow-y: auto; overflow-x: hidden;">
+                            <div class="row row-cols-xxl-3 row-cols-xl-2 row-cols-sm-1 row-cols-1 g-2" id="trainee-detail">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+    <div class="modal fade" id="newActivityToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="activity-title">New Activity</h1>
+                    <img src="../images/add.svg" class="btn" type="button"
+                        style="border: none; position: absolute; right: 100px;" id="btn-add-deviceSelection">
+                    <img src="../images/a.svg" class="btn" type="button"
+                        style="border: none; position: absolute; right: 50px;" id="btn-threshold-settings">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row">
+                        <div class="col-5 p-4">
+                            <div>
+                                <div class="mb-3 row">
+                                    <label for="activityName"
+                                        class="col-sm-5 col-form-label text-end pe-3 required">Activity name</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="activityName" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="location" class="col-sm-5 col-form-label text-end pe-3 required">Location</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="location" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="activityStartTime" class="col-sm-5 col-form-label text-end pe-3 required">Activity
+                                        Start Time</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="activityStartTime" autocomplete="off" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="dateConducted" class="col-sm-5 col-form-label text-end pe-3 required">Date
+                                        Conducted</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="dateConducted" autocomplete="off" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="remarks" class="col-sm-5 col-form-label text-end pe-3">Remarks</label>
+                                    <div class="col-sm-7">
+                                        <textarea type="text" class="form-control" id="remarks" rows="5" autocomplete="off"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center py-2">
+                                    <div class="col-auto">
+                                        <img src="../images/start.svg" id="submit-activity">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="row">
+                                <table class="table table-hover text-center" id="device-table">
+    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deviceStatusToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Device Status</h1>
+                    <input type="file" style="display: none;" id="upload-device-input" accept=".xlsx">
+                    <span class="btn" type="button" style="border: none; position: absolute; right: 100px;" id="btn-upload"><img src="../images/upload.svg" ></span>
+                    <!-- <a href="/download/deviceStatus" class="btn" type="button" style="border: none; position: absolute; right: 50px;" id="btn-device-status-download"><img src="../images/download.svg" ></a> -->
+                    <span class="btn" type="button" style="border: none; position: absolute; right: 50px;" id="btn-device-status-download"><img src="../images/download.svg" ></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-1">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <table class="table table-hover text-center" id="device-status-table">
+    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deviceSelectionToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Device Selection</h1>
+                    <button type="button" class="btn position-relative border-0">
+                        <img src="../images/user.svg" class="ms-2">
+                        <span class="position-absolute top-0 badge rounded-circle bg-white text-black" style="transform: translate(-50%, 100%)!important;" id="deviceSelectionNum">0</span>
+                    </button>
+                    <img src="../images/submit.svg" class="btn" type="button" id="submit-device-selection"
+                        style="border: none; position: absolute; right: 50px;">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-1">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <table class="table table-hover text-center" id="device-select-table">
+    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal2" id="thresholdSettingsToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Threshold Settings</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-1">
+                    <div class="row" style="padding: 0.5rem 1rem;">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="thresholdSettingsForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Core Temperature Threshold</label>
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <div id="tcRedThreshold"></div>
+                                            </div>
+                                            <div class="col-auto slider-val">
+                                                <span class="color-red ft-16 ms-3" id="tcRedThresholdVal">40</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="color-red">(Red Heat Strain Status in Deg C)</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Core Temperature Threshold</label>
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <div id="tcAmberThreshold"></div>
+
+                                            </div>
+                                            <div class="col-auto slider-val">
+                                                <span class="color-amber ft-16 ms-3" id="tcAmberThresholdVal">38</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="color-amber">(Amber Heat Strain Status in Deg C)</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Enable PSI</label>
+                                        <div class="form-check form-switch ps-0">
+                                            <div><input class="form-check-input" type="checkbox" role="switch" id="enablePSI" checked></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Physiological Strain Index Threshold</label>
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <div id="psiRedThreshold"></div>
+                                            </div>
+                                            <div class="col-auto slider-val">
+                                                <span class="color-red ft-16  ms-3" id="psiRedThresholdVal">9</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="color-red">(Red Physiological Strain)</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Physiological Strain Index Threshold</label>
+                                        <div class="row align-items-center">
+                                            <div class="col-8">
+                                                <div id="psiAmberThreshold"></div>
+                                            </div>
+                                            <div class="col-auto slider-val">
+                                                <span class="color-amber ft-16 ms-3" id="psiAmberThresholdVal">7</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="color-amber">(Amber Physiological Strain)</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Algorithm Selection</label>
+                                        <select class="form-select" id="algorithmSelection">
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Alarm Status (For Mobile device)</label>
+                                        <select class="form-select" id="alarmStatus">
+                                            <option value="1">On</option>
+                                            <option value="0">Off</option>
+                                        </select>
+                                    </div>
+                                    <div class="row justify-content-center py-2">
+                                        <div class="col-auto">
+                                            <img src="../images/sub1.svg" id="btn-submit-threshold">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal2" id="passwordToggle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content" style="position: absolute; left: 60%; top: 30%;">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Admin Password</h1>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body p-1">
+                    <div class="row" style="padding: 1.5rem 1rem;">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="adminPassordForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password">
+                                        <label class="form-label text-danger hide" id="pwdError">Password is not correct!</label>
+                                    </div>
+                                    <div class="row justify-content-center py-2">
+                                        <div class="col-auto me-5">
+                                            <img src="../images/cancel1.svg" role="button" id="btn-pwd-cancel">
+                                        </div>
+                                        <div class="col-auto">
+                                            <img src="../images/sub1.svg" role="button" id="btn-pwd-confirm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal2" id="endActivityToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">End Activity</h1>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body p-1">
+                    <div class="row" style="padding: 1.5rem 1rem;">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="row mb-3 justify-content-center py-2">
+                                    <div class="col-auto">
+                                        <label class="text-danger">Warning: Ending Activity Will Stop The Monitoring Of Participants Status</label>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center py-2">
+                                    <div class="col-auto me-5">
+                                        <img src="../images/cancel1.svg" role="button" data-bs-dismiss="modal" aria-label="Close">
+                                    </div>
+                                    <div class="col-auto">
+                                        <img src="../images/sub1.svg" role="button" id="submit-end-activity">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="viewPastActivityToggle" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:1400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">View Past Activity Data</h1>
+                    <div class="row align-items-center" style="position: absolute; right: 50px;">
+                        <div class="col-auto me-2" style="width: 100px;">
+                            <div class="d-inline">Date:</div>
+                            <div class="d-inline" id="selectActivityDate"></div>
+                        </div>
+                        <div class="col-auto me-2">
+                            <span class="btn" type="button" style="border: none;" id="btn-download-activity"><img src="../images/download.svg" ></span>
+                        </div>
+                        <div class="col-auto me-2">
+                            <span class="btn" type="button" style="border: none;" id="btn-delete-activity"><img src="../images/delete.svg" ></span>
+                        </div>
+                        <div class="col-auto me-2">
+                            <label>Select Activity:</label>
+                        </div>
+                        <div class="col-auto">
+                            <!-- <select class="form-select" style="width: 200px; height: 30px; padding: 0.2rem 0.75rem;" id="selectActivity">
+                                <option value=""></option>
+                            </select> -->
+                            <div class="dropdown">
+                                <input class="form-select" type="text" role="button" data-bs-toggle="dropdown" readonly id="selectActivity" style="width: 200px; height: 30px; padding: 0.2rem 0.75rem; background-color: #414141; color: #fff;">
+                                <ul class="dropdown-menu w-100 dropdown-menu-dark" id="dropdown-activity" style="height: 275px; overflow-y: auto; background-color: #414141 !important;">
+                                </ul>
+                              </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-1">
+                    <div class="row" style="padding: 0.5rem;">
+                        <div class="row" style="--bs-gutter-x: .5rem !important;">
+                            <div class="col-8">
+                                <div class="row">
+                                    <table class="table table-hover text-center" id="past-activity-table"></table>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="row" style="background-color: #272727;">
+                                    <div class="col-6 position-relative self-vr">
+                                        <div class="row status-title">
+                                            <div class="align-self-center"><label class="fw-bold">Heat Strain Status</label></div>
+                                        </div>
+                                        <div class="row status-tc">
+                                            <div class="col">
+                                                <div><label class="ft-18" id="highestTc">-</label></div>
+                                                <div><label class="ft-12">Highest Tc</label></div>
+                                            </div>
+                                            <div class="col">
+                                                <div><label class="ft-18" id="avgTc">-</label></div>
+                                                <div><label class="ft-12">Average Tc</label></div>
+                                            </div>
+                                        </div>
+                                        <div class="row status-number">
+                                            <div class="col">
+                                                <div class="status-number-1"><label class="ft-14" id="tcStatusGreen">-</label></div>
+                                                <div class="status-number-2"><label class="ft-14" id="tcStatusAmber">-</label></div>
+                                                <div class="status-number-3"><label class="ft-14" id="tcStatusRed">-</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="row status-title">
+                                            <div class="align-self-center"><label class="fw-bold">PSI Status</label></div>
+                                        </div>
+                                        <div class="row status-tc">
+                                            <div class="col">
+                                                <div><label class="ft-18" id="highestPSI">-</label></div>
+                                                <div><label class="ft-12">Highest PSI</label></div>
+                                            </div>
+                                            <div class="col">
+                                                <div><label class="ft-18" id="avgPSI">-</label></div>
+                                                <div><label class="ft-12">Average PSI</label></div>
+                                            </div>
+                                        </div>
+                                        <div class="row status-number">
+                                            <div class="col">
+                                                <div class="status-number-1"><label class="ft-14" id="psiStatusGreen">-</label></div>
+                                                <div class="status-number-2"><label class="ft-14" id="psiStatusAmber">-</label></div>
+                                                <div class="status-number-3"><label class="ft-14" id="psiStatusRed">-</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="--bs-gutter-x: .5rem !important; position:relative;">
+                            <div id="container" style="height:400px"></div>
+                            <div class="col-auto btn-change-group">
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="btnradio" id="psi-radio" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="psi-radio" data-type="1" id="psi-radio-btn">PSI</label>
+                                  
+                                    <input type="radio" class="btn-check" name="btnradio" id="tc-radio" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="tc-radio" data-type="2">Tc</label>
+                                  
+                                    <input type="radio" class="btn-check" name="btnradio" id="hr-radio" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="hr-radio" data-type="3">Hr</label>
+
+                                    <input type="radio" class="btn-check" name="btnradio" id="br-radio" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="br-radio" data-type="4">Br</label>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal2" id="changeNameToggle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Enter Name</h1>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body p-1">
+                    <div class="row" style="padding: 1.5rem 1rem;">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="adminPassordForm">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="changeNameInput" autocomplete="off">
+                                    </div>
+                                    <div class="row justify-content-center py-2">
+                                        <div class="col-auto me-5">
+                                            <img src="../images/cancel1.svg" role="button" id="btn-name-cancel">
+                                        </div>
+                                        <div class="col-auto">
+                                            <img src="../images/sub1.svg" role="button" id="btn-name-confirm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal2" id="fileNameToggle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Enter Export File Name</h1>
+                </div>
+                <div class="modal-body p-1">
+                    <div class="row" style="padding: 1.5rem 1rem;">
+                        <div class="col-12">
+                            <div class="row">
+                                <div>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="filename" autocomplete="off">
+                                    </div>
+                                    <div class="row justify-content-center py-2">
+                                        <div class="col-auto me-5">
+                                            <img src="../images/cancel1.svg" role="button" id="btn-filename-cancel">
+                                        </div>
+                                        <div class="col-auto">
+                                            <img src="../images/sub1.svg" role="button" id="btn-filename-confirm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="module" src="../js/main.js"></script>
+<script type="module" src="../js/index.js"></script>
+
+<script type="text/javascript" src="../js/common.js"></script> 
+
+</html>

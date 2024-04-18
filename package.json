@@ -1,0 +1,77 @@
+{
+  "name": "hestimo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "cmd-start": "title hestimo 1.0 && node --max_old_space_size=2048 bin/www",
+    "start": "node bin/www --max_old_space_size=2048",
+    "pkg": "pkg . --out-path=dist/"
+  },
+  "pkg": {
+    "scripts": [],
+    "targets": [
+      "win"
+    ],
+    "assets": [
+      "public/**/*",
+      "views/**/*",
+      "node_modules/**/*"
+    ],
+    "outputPath": "dist"
+  },
+  "bin": "bin/www",
+  "keywords": [
+    "hestimo.1.0"
+  ],
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "axios": "^1.6.8",
+    "body-parser": "^1.18.3",
+    "bootstrap": "^5.3.1",
+    "bootstrap-table": "^1.22.2",
+    "child_process": "^1.0.2",
+    "cls-hooked": "^4.2.2",
+    "config-lite": "^4.0.0",
+    "cookie-parser": "^1.4.3",
+    "crypto": "^1.0.1",
+    "datatables.net-bs5": "^1.13.4",
+    "debug": "^4.3.4",
+    "destroy": "^1.0.4",
+    "ejs": "^3.1.8",
+    "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
+    "express-body-parser-error-handler": "^1.0.4",
+    "express-rate-limit": "^7.2.0",
+    "express-serve-static-core": "^0.1.1",
+    "express-session": "^1.17.1",
+    "formidable": "^1.2.6",
+    "generate-function": "^2.0.0",
+    "generate-object-property": "^1.2.0",
+    "helmet": "^7.1.0",
+    "highcharts": "^10.3.2",
+    "http-proxy-middleware": "^2.0.6",
+    "images": "^3.2.4",
+    "jquery": "^3.7.1",
+    "jsonpointer": "^5.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "leaflet": "^1.7.1",
+    "leaflet-contextmenu": "^1.4.0",
+    "leaflet.markercluster": "^1.5.3",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "mysql2": "^3.9.5",
+    "node-schedule": "^2.1.1",
+    "node-xlsx": "^0.24.0",
+    "numeral": "^2.0.6",
+    "pinkie-promise": "^2.0.1",
+    "qr-image": "^3.2.0",
+    "sequelize": "^6.17.0",
+    "serve-favicon": "^2.5.0",
+    "serve-static": "^1.14.1",
+    "socket.io": "^4.4.1",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1",
+    "xlsx-js-style": "^1.2.0",
+    "xtend": "^4.0.1"
+  }
+}
