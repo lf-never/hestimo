@@ -35,12 +35,6 @@ router.post('/deleteActivityById', indexService.DeleteActivityById);
 router.post('/changeNameById', indexService.ChangeNameById);
 router.post('/updateActivityThresholdSettings', indexService.UpdateActivityThresholdSettings);
 router.post('/getThresholdSettings', indexService.GetThresholdSettings);
-router.use(limiter)
-router.get('/download/deviceStatus', (req, res) => {
-    downloadService.ExportDataToExcel(req,res)
-};
-router.use(limiter)
-router.get('/download/activity', downloadService.DownloadActivityToExcel);
 
 // Mobile
 router.post('/uploadMobileData', indexService.UploadMobileData);
