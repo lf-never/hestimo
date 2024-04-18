@@ -13,16 +13,11 @@ const crypto = require('crypto');
 const utils = require('./util/utils.js');
 const log = require('./winston/logger').logger('APP');
 const conf = require('./conf/conf');
-const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-const limiter = rateLimit({
-	windowMs: 1 * 1000,
-	max: 10000,
-	message: "Too many requests from this client, please try again later.",
-})
-app.use(limiter)
+
+app.use(utils.limiter)
 
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', ejs.__express);

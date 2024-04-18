@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const jwtConf = require('../conf/jwt');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 
 module.exports.responseError = function (msg, code = null) {
     return {
@@ -90,3 +91,10 @@ const getSafePath = function (p) {
     return p
 }
 module.exports.getSafePath = getSafePath
+
+const limiter = rateLimit({
+	windowMs: 1 * 1000,
+	max: 10000,
+	message: "Too many requests from this client, please try again later.",
+})
+module.exports.limiter = limiter

@@ -4,7 +4,9 @@ require('express-async-errors');
 
 const indexService = require('../services/indexService');
 const downloadService = require('../services/downloadService');
+const utils = require('../util/utils.js');
 
+router.use(utils.limiter)
 
 router.get('/', (req, res) => {
     res.render('index');
