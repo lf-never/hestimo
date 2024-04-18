@@ -117,6 +117,11 @@ process.on('unhandledRejection', function (err, promise) {
 	log.error(err.message);
 })
 
+const downloadService = require('./services/downloadService');
+app.get('/download/deviceStatus', (req, res) => {
+    downloadService.ExportDataToExcel(req,res)
+};
+
 app.use(function (req, res, next) {
 	const err = new Error('Not Found');
 	err.status = 404;
