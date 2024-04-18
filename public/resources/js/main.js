@@ -212,7 +212,7 @@ $(function () {
                 url: "/getDeviceSelection",
                 type: "POST",
                 data: function (d) {
-                    return d
+                    return {start: d.start, page: d.length}
                 },
             },
             "drawCallback": function (settings, json) {
@@ -459,8 +459,11 @@ $(function () {
             url: "/getPastActivityBySelectActivityId",
             type: "POST",
             data: function (d) {
-                d.selectActivityId = $('#selectActivity').attr("data-id")
-                return d
+                return {
+                    selectActivityId: $('#selectActivity').attr("data-id"), 
+                    start: d.start, 
+                    page: d.length
+                }
             },
         },
         "initComplete": function (settings, json) {

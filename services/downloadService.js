@@ -4,7 +4,7 @@ const { QueryTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const xlsx = require('xlsx-js-style');
-const _xlsx = require('node-xlsx');
+const _xlsx = require('xlsx');
 const { User } = require('../model/user');
 const formidable = require('formidable');
 const { sequelizeObj } = require('../db/dbConf')
@@ -50,7 +50,7 @@ const GetUserData = async function () {
 
     let users = await User.findAll()
     let excelJson = []
-    let title = ["S/N", "Set ", "IP Address", "Name", "SEM ID", "Status", "Equipment Status"]
+    let title = ["S/N", "Set", "IP Address", "Name", "SEM ID", "Status", "Equipment Status"]
     excelJson.push(title)
     users.forEach((r, i) => {
         let status = "Warning"
@@ -74,15 +74,23 @@ const GetUserData = async function () {
 }
 
 const WriteDataIntoExcel = function (datas, path) {
-    let buffer = _xlsx.build([
-        {
-            name: 'sheet1',
-            data: datas
-        }
-    ]);
-    path = utils.getSafePath(path)
+    // let buffer = _xlsx.build([
+    //     {
+    //         name: 'sheet1',
+    //         data: datas
+    //     }
+    // ]);
+    // path = utils.getSafePath(path)
 
-    fs.writeFileSync(path, buffer, { 'flag': 'w' });
+    // fs.writeFileSync(path, buffer, { 'flag': 'w' });
+
+    const wb = _xlsx.utils.book_new();
+
+    const ws = _xlsx.utils.aoa_to_sheet(datas);
+
+    _xlsx.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    _xlsx.writeFile(wb, path);
 }
 
 const WriteDataIntoExcel1 = function (data, path) {
@@ -133,45 +141,62 @@ module.exports.UploadDevice = async function (req, res) {
             let newPath = path.join(process.cwd(), uploadFolder, filename);
             fs.renameSync(oldPath, newPath);
 
-            var datas = []
-            var obj = _xlsx.parse(newPath);
-            let title = obj[0].data[0]
-            let setColumn = 0
-            let ipAddressColumn = 0
-            let nameColumn = 0
+            // var datas = []
+            // var obj = _xlsx.parse(newPath);
+            // let title = obj[0].data[0]
+            // let setColumn = 0
+            // let ipAddressColumn = 0
+            // let nameColumn = 0
 
-            title.forEach((val, index) => {
-                if (val.trim() == "Set") {
-                    setColumn = index
-                } else if (val.trim() == "IP Address") {
-                    ipAddressColumn = index
-                } else if (val.trim() == "Name") {
-                    nameColumn = index
-                }
-            })
+            // title.forEach((val, index) => {
+            //     if (val.trim() == "Set") {
+            //         setColumn = index
+            //     } else if (val.trim() == "IP Address") {
+            //         ipAddressColumn = index
+            //     } else if (val.trim() == "Name") {
+            //         nameColumn = index
+            //     }
+            // })
 
-            let data = obj[0].data.slice(1)
-            data = data.filter(o => o.length > 0)
-            if (data.length > 0) {
-                datas.push(data)
-            }
-            let mergedDatas = [].concat.apply([], datas);
+            // let data = obj[0].data.slice(1)
+            // data = data.filter(o => o.length > 0)
+            // if (data.length > 0) {
+            //     datas.push(data)
+            // }
+            // let mergedDatas = [].concat.apply([], datas);
+
+            // let records = []
+            // for (let row of mergedDatas) {
+            //     let setNo = row[setColumn]
+            //     let ipAddress = row[ipAddressColumn]
+            //     let name = row[nameColumn]
+            //     // let user = await User.findOne({ where: { ipAddress: ipAddress } })
+            //     let data = {
+            //         setNo: setNo,
+            //         ipAddress: ipAddress,
+            //         name: name,
+            //         id: null
+            //     }
+            //     // if (user) {
+            //     //     data.id = user.id
+            //     // }
+            //     records.push(data)
+            // }
+            const workbook = _xlsx.readFile(newPath);
+
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+
+            const obj = _xlsx.utils.sheet_to_json(worksheet);
 
             let records = []
-            for (let row of mergedDatas) {
-                let setNo = row[setColumn]
-                let ipAddress = row[ipAddressColumn]
-                let name = row[nameColumn]
-                // let user = await User.findOne({ where: { ipAddress: ipAddress } })
+            for (let row of obj) {
                 let data = {
-                    setNo: setNo,
-                    ipAddress: ipAddress,
-                    name: name,
+                    setNo: row['Set'] || row['Set '],
+                    ipAddress: row['IP Address'],
+                    name: row['Name'],
                     id: null
                 }
-                // if (user) {
-                //     data.id = user.id
-                // }
                 records.push(data)
             }
             await sequelizeObj.transaction(async (t1) => {
