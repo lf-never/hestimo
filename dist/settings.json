@@ -1,0 +1,10 @@
+{
+    "thresholdSettings": {
+        "password": "123456",
+        "algorithm": {
+            "Algorithm 1": "Algorithm Name 1",
+            "Algorithm 2": "Algorithm Name 2",
+            "Algorithm 3": "Algorithm Name 3"
+        }
+    }
+}

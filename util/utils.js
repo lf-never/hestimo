@@ -96,5 +96,9 @@ const apiLimiter = rateLimit({
     windowMs: 1 * 1000, // 1s
     max: 10000,
     message: 'Too many requests, please try again later.',
+    statusCode: 400,
+    handler: function (req, res) {
+        return res.status(400).send("Too Many Requests");
+    }
 });
 module.exports.apiLimiter = apiLimiter

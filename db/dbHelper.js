@@ -6,7 +6,6 @@ const { User } = require('../model/user');
 
 try {
     log.info('Start Init DB!');
-    // TODO: maybe init data into db here!
     // ...
     log.info('Finish Init DB!');
 

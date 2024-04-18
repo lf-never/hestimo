@@ -12,6 +12,7 @@ const helmet = require('helmet');
 const crypto = require('crypto');
 const utils = require('./util/utils.js');
 const log = require('./winston/logger').logger('APP');
+const conf = require('./conf/conf');
 
 const app = express();
 
@@ -52,12 +53,12 @@ app.use(helmet({
 	},
 }));
 app.use(session({
-	secret: process.env.SESSION_SECRET  || 'personal-session',
+	secret: process.env.SESSION_SECRET || conf.sessionSecret,
 	resave: false,
 	saveUninitialized: false,
 	cookie: {
 		sameSite: "Strict",
-		secure: process.env.NODE_ENV === 'production'
+		secure: true
 	},
 }));
 

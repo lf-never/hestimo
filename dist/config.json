@@ -1,0 +1,12 @@
+{
+    "dbConf": {
+        "host": "localhost",
+        "user": "root",
+        "password": "root",
+        "port": 3306,
+        "database": "hestimo"
+    },
+    "serverPort": 10000,
+    "serverPortHttps": 9900,
+    "sessionSecret": "personal-session"
+}

@@ -29,7 +29,7 @@ const isPhoneDisconnected = function (now, lastConnectionTime) {
 module.exports = {
     GetDeviceSelection: async function (req, res) {
         let start = Number(req.body.start)
-        let length = Number(req.body.length)
+        let length = Number(req.body['length'])
         let users = await User.findAll({ offset: start, limit: length })
         let now = new Date()
         for (let user of users) {
@@ -387,7 +387,7 @@ module.exports = {
     GetPastActivityBySelectActivityId: async function (req, res) {
         let { selectActivityId } = req.body
         let start = Number(req.body.start)
-        let length = Number(req.body.length)
+        let length = Number(req.body['length'])
         if (selectActivityId == 0) {
             return res.json(utils.responseSuccess([], 0))
         }
