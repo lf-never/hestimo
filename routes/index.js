@@ -5,8 +5,13 @@ require('express-async-errors');
 const indexService = require('../services/indexService');
 const downloadService = require('../services/downloadService');
 const utils = require('../util/utils.js');
-
-router.use(utils.limiter)
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+	windowMs: 1 * 1000,
+	max: 10000,
+	message: "Too many requests from this client, please try again later.",
+})
+router.use(limiter)
 
 router.get('/', (req, res) => {
     res.render('index');
