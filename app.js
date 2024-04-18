@@ -15,6 +15,7 @@ const log = require('./winston/logger').logger('APP');
 const conf = require('./conf/conf');
 
 const app = express();
+const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({
 	windowMs: 1 * 1000,
 	max: 10000,
