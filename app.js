@@ -15,9 +15,13 @@ const log = require('./winston/logger').logger('APP');
 const conf = require('./conf/conf');
 
 const app = express();
+const limiter = rateLimit({
+	windowMs: 1 * 1000,
+	max: 10000,
+	message: "Too many requests from this client, please try again later.",
+})
 
-
-app.use(utils.limiter)
+app.use(limiter)
 
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', ejs.__express);
