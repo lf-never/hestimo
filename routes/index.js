@@ -4,9 +4,9 @@ require('express-async-errors');
 
 const indexService = require('../services/indexService');
 const downloadService = require('../services/downloadService');
-const utils = require('../util/utils.js');
 
-router.get('/', utils.apiLimiter, (req, res) => {
+
+router.get('/', (req, res) => {
     res.render('index');
 });
 
@@ -29,8 +29,8 @@ router.post('/changeNameById', indexService.ChangeNameById);
 router.post('/updateActivityThresholdSettings', indexService.UpdateActivityThresholdSettings);
 router.post('/getThresholdSettings', indexService.GetThresholdSettings);
 
-router.get('/download/deviceStatus', utils.apiLimiter, downloadService.ExportDataToExcel);
-router.get('/download/activity', utils.apiLimiter, downloadService.DownloadActivityToExcel);
+router.get('/download/deviceStatus', downloadService.ExportDataToExcel);
+router.get('/download/activity', downloadService.DownloadActivityToExcel);
 
 // Mobile
 router.post('/uploadMobileData', indexService.UploadMobileData);

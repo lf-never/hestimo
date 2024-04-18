@@ -13,8 +13,16 @@ const crypto = require('crypto');
 const utils = require('./util/utils.js');
 const log = require('./winston/logger').logger('APP');
 const conf = require('./conf/conf');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
+
+const limiter = rateLimit({
+	windowMs: 1 * 1000,
+	max: 10000,
+	message: "Too many requests from this client, please try again later.",
+})
+app.use(limiter)
 
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', ejs.__express);
@@ -115,7 +123,9 @@ app.use(function (req, res, next) {
 	next(err);
 });
 
-app.use(utils.apiLimiter, function (err, req, res, next) {
+
+
+app.use(function (err, req, res, next) {
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 	log.error(`${req.method} - ${req.originalUrl}`);
